@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scribble</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main id="app">
+    <section id="screen-home" class="screen">
+      <h1>Scribble</h1>
+      <p class="tagline">Draw. Guess. Win.</p>
+      <input id="name-input" placeholder="Your name" maxlength="20" />
+      <div class="row">
+        <button id="btn-create">Create Room</button>
+      </div>
+      <div class="divider"><span>or</span></div>
+      <div class="row">
+        <input id="code-input" placeholder="ROOM CODE" maxlength="5" />
+        <button id="btn-join">Join</button>
+      </div>
+      <p id="home-error" class="error"></p>
+    </section>
+
+    <section id="screen-game" class="screen hidden">
+      <header id="topbar">
+        <div class="room-info">
+          Room <span id="room-code"></span>
+          <button id="btn-copy" title="Copy link">Copy link</button>
+        </div>
+        <div id="round-info"></div>
+        <div id="word-display" class="word"></div>
+        <div id="timer" class="timer"></div>
+      </header>
+
+      <div class="game-grid">
+        <aside id="players-panel">
+          <h3>Players</h3>
+          <ul id="players-list"></ul>
+          <div id="settings-panel" class="hidden">
+            <h4>Game Settings</h4>
+            <label>Rounds
+              <select id="set-rounds">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="7">7</option>
+              </select>
+            </label>
+            <label>Draw time
+              <select id="set-time">
+                <option value="30">30s</option>
+                <option value="45">45s</option>
+                <option value="60">60s</option>
+                <option value="70" selected>70s</option>
+                <option value="90">90s</option>
+                <option value="120">120s</option>
+              </select>
+            </label>
+            <details id="custom-words-wrap">
+              <summary><span id="words-summary">Default word pack</span></summary>
+              <textarea id="set-words" placeholder="Paste your own words, one per line or comma-separated. Min 3 words."></textarea>
+            </details>
+          </div>
+          <button id="btn-start" class="hidden">Start Game</button>
+        </aside>
+
+        <div id="canvas-wrap">
+          <div id="overlay" class="hidden"></div>
+          <div id="draw-status" class="hidden"></div>
+          <canvas id="canvas" width="800" height="600"></canvas>
+          <div id="tools" class="hidden">
+            <div class="colors" id="palette"></div>
+            <label>Size <input id="size" type="range" min="2" max="40" value="6" /></label>
+            <button id="btn-pen" class="tool-btn active" title="Pen">✏️</button>
+            <button id="btn-eraser" class="tool-btn" title="Eraser">🩹</button>
+            <button id="btn-undo" class="tool-btn" title="Undo">↶</button>
+            <button id="btn-clear">Clear</button>
+          </div>
+          <div id="choose-panel" class="hidden">
+            <h2 id="choose-title">Choose a word</h2>
+            <div id="choose-buttons"></div>
+          </div>
+        </div>
+
+        <aside id="chat-panel">
+          <ul id="chat-list"></ul>
+          <form id="chat-form">
+            <input id="chat-input" placeholder="Type your guess..." autocomplete="off" maxlength="200" />
+          </form>
+        </aside>
+      </div>
+    </section>
+
+    <section id="screen-gameover" class="screen hidden">
+      <h1>Game Over</h1>
+      <ol id="final-scores"></ol>
+      <button id="btn-back">Back to lobby</button>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/client.js"></script>
+</body>
+</html>
