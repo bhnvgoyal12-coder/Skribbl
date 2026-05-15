@@ -141,7 +141,15 @@ button:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink
 button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
 button:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: var(--shadow-hard); transform: none; }
 
-button.secondary { background: var(--cobalt); }
+button.secondary {
+  background: var(--paper);
+  color: var(--ink);
+  border: 3px dashed var(--ink);
+  font-size: 15px;
+  padding: 12px 22px;
+  letter-spacing: 0.5px;
+}
+button.secondary:hover { background: var(--paper-dark); }
 button.tertiary { background: var(--mustard); color: var(--ink); }
 
 /* === Home === */
@@ -166,6 +174,35 @@ button.tertiary { background: var(--mustard); color: var(--ink); }
 }
 
 #name-input { width: 320px; text-align: center; }
+#name-input.shake { animation: shake 0.4s ease-in-out; border-color: var(--vermillion); }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+#join-hint {
+  font-family: var(--font-hand);
+  font-size: 24px;
+  color: var(--ink);
+  background: var(--mustard);
+  border: 2px solid var(--ink);
+  padding: 6px 18px;
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: rotate(-1.5deg);
+  margin-bottom: 4px;
+}
+#join-hint strong {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 3px;
+  background: var(--paper);
+  padding: 0 8px;
+  margin-left: 4px;
+  border: 1px solid var(--ink);
+}
 .row { display: flex; gap: 10px; align-items: center; }
 
 .divider {

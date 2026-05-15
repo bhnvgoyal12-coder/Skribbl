@@ -120,16 +120,40 @@ function confetti(count = 40, originX = null, originY = null) {
 }
 
 // ====== Home screen ======
+function requireName() {
+  const name = $("name-input").value.trim();
+  if (!name) {
+    $("home-error").textContent = "Please enter your name first";
+    const input = $("name-input");
+    input.classList.remove("shake");
+    void input.offsetWidth; // re-trigger animation
+    input.classList.add("shake");
+    input.focus();
+    return null;
+  }
+  $("home-error").textContent = "";
+  return name;
+}
+
+$("name-input").addEventListener("input", () => {
+  if ($("home-error").textContent === "Please enter your name first") {
+    $("home-error").textContent = "";
+  }
+});
+
 $("btn-create").addEventListener("click", () => {
   ensureAudio();
-  const name = $("name-input").value.trim() || "Anon";
+  const name = requireName();
+  if (!name) return;
   socket.emit("create", { name }, (res) => {
     if (!res.ok) $("home-error").textContent = res.error || "Error";
   });
 });
+
 $("btn-join").addEventListener("click", () => {
   ensureAudio();
-  const name = $("name-input").value.trim() || "Anon";
+  const name = requireName();
+  if (!name) return;
   const code = $("code-input").value.trim().toUpperCase();
   if (!code) { $("home-error").textContent = "Enter a room code"; return; }
   socket.emit("join", { name, code }, (res) => {
@@ -137,8 +161,29 @@ $("btn-join").addEventListener("click", () => {
   });
 });
 
+// Pressing Enter from either field — Join if code present, else Create
+[$("name-input"), $("code-input")].forEach((el) =>
+  el.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    const hasCode = $("code-input").value.trim().length > 0;
+    (hasCode ? $("btn-join") : $("btn-create")).click();
+  })
+);
+
 const urlParams = new URLSearchParams(location.search);
-if (urlParams.get("room")) $("code-input").value = urlParams.get("room").toUpperCase();
+const urlRoom = urlParams.get("room");
+if (urlRoom) {
+  const code = urlRoom.toUpperCase();
+  $("code-input").value = code;
+  const hint = $("join-hint");
+  hint.querySelector("strong").textContent = code;
+  hint.classList.remove("hidden");
+  // Focus the name input so the user can type immediately
+  setTimeout(() => $("name-input").focus(), 100);
+} else {
+  setTimeout(() => $("name-input").focus(), 100);
+}
 
 // ====== Game UI ======
 $("btn-copy").addEventListener("click", () => {

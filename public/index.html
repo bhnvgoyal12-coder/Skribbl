@@ -11,14 +11,15 @@
     <section id="screen-home" class="screen">
       <h1>Scribble</h1>
       <p class="tagline">Draw. Guess. Win.</p>
-      <input id="name-input" placeholder="Your name" maxlength="20" />
-      <div class="row">
-        <button id="btn-create">Create Room</button>
-      </div>
-      <div class="divider"><span>or</span></div>
+      <div id="join-hint" class="hidden">Joining room <strong></strong></div>
+      <input id="name-input" placeholder="Your name *" maxlength="20" />
       <div class="row">
         <input id="code-input" placeholder="ROOM CODE" maxlength="5" />
-        <button id="btn-join">Join</button>
+        <button id="btn-join">Join Game</button>
+      </div>
+      <div class="divider"><span>or start a new one</span></div>
+      <div class="row">
+        <button id="btn-create" class="secondary">Create New Room</button>
       </div>
       <p id="home-error" class="error"></p>
     </section>
