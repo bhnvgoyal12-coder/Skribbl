@@ -429,9 +429,37 @@ socket.on("state", (s) => {
   const overlay = $("overlay");
   if (s.phase === "lobby") {
     overlay.classList.remove("hidden");
-    overlay.innerHTML = `<div>Waiting for players</div><div>share the code <strong>${escapeHtml(s.code)}</strong> with a friend</div>`;
+    const shareUrl = `${location.origin}/?room=${s.code}`;
+    overlay.innerHTML = `
+      <div class="lobby-title">Waiting for players</div>
+      <div class="lobby-sub">share this link to invite friends</div>
+      <div class="share-url-box" data-url="${escapeHtml(shareUrl)}" role="button" tabindex="0" aria-label="Copy invite link">
+        <span class="share-url">${escapeHtml(shareUrl)}</span>
+        <span class="copy-url-btn" aria-hidden="true">📋 Copy</span>
+      </div>
+      <div class="or-code">or use code <strong>${escapeHtml(s.code)}</strong></div>
+    `;
   } else {
     overlay.classList.add("hidden");
+  }
+});
+
+// Delegated copy handler for the lobby share-url box
+$("overlay").addEventListener("click", (e) => {
+  const box = e.target.closest(".share-url-box");
+  if (!box) return;
+  const url = box.dataset.url;
+  if (!url) return;
+  navigator.clipboard?.writeText(url);
+  const btn = box.querySelector(".copy-url-btn");
+  if (btn) {
+    const orig = btn.textContent;
+    btn.textContent = "✓ Copied!";
+    box.classList.add("copied");
+    setTimeout(() => {
+      btn.textContent = orig;
+      box.classList.remove("copied");
+    }, 1500);
   }
 });
 
